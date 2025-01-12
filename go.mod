@@ -2,4 +2,4 @@ module github.com/andreasSchauer/webcrawler
 
 go 1.23.4
 
-require golang.org/x/net v0.34.0 // indirect
+require golang.org/x/net v0.34.0

@@ -1,24 +1,28 @@
 package main
 
 import (
-
+	"os"
+	"fmt"
 )
 
 func main() {
+	args := os.Args[1:]
 
-	htmlBody := `
-		<html>
-			<body>
-				<a href="/path/one">
-					<span>Boot.dev</span>
-				</a>
-				<a href="https://other.com/path/one">
-					<span>Boot.dev</span>
-				</a>
-			</body>
-		</html>
-	`
+	if len(args) < 1 {
+		fmt.Println("no website provided")
+		os.Exit(1)
+	}
 
-	rawBaseURL := "https://blog.boot.dev"
-	getURLsFromHTML(htmlBody, rawBaseURL)
+	if len(args) > 1 {
+		fmt.Println("too many arguments provided")
+		os.Exit(1)
+	}
+
+	baseURL := args[0]
+	fmt.Printf("starting crawl of: %s...", baseURL)
+	htmlBody, err := getHTML(baseURL) 
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(htmlBody)
 }
