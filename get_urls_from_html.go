@@ -8,7 +8,7 @@ import (
 )
 
 
-func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
+func getURLsFromHTML(htmlBody string, baseURL *url.URL) ([]string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlBody))
 	if err != nil {
 		return nil, fmt.Errorf("couldn't read HTML body")
@@ -20,7 +20,7 @@ func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 		if node.Type == html.ElementNode && node.DataAtom == atom.A {
 			for _, a := range node.Attr {
 				if a.Key == "href" {
-					URL, err := getAbsURL(a.Val, rawBaseURL)
+					URL, err := getAbsURL(a.Val, baseURL)
 					if err != nil {
 						return nil, err
 					}
@@ -35,8 +35,8 @@ func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 }
 
 
-func getAbsURL(URL, rawBaseURL string) (string, error) {
-	if strings.HasPrefix(URL, rawBaseURL) {
+func getAbsURL(URL string, baseURL *url.URL) (string, error) {
+	if strings.HasPrefix(URL, baseURL.String()) {
 		return URL, nil
 	}
 	
@@ -45,12 +45,7 @@ func getAbsURL(URL, rawBaseURL string) (string, error) {
 		return "", fmt.Errorf("couldn't parse URL")
 	}
 
-	base, err := url.Parse(rawBaseURL)
-	if err != nil {
-		return "", fmt.Errorf("couldn't parse base URL")
-	}
-
-	AbsURL := base.ResolveReference(u).String()
+	AbsURL := baseURL.ResolveReference(u).String()
 
 	return AbsURL, nil
 }
