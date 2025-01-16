@@ -67,10 +67,3 @@ func sortByVisitDesc(a, b int) int {
 
 	return 0
 }
-
-/*
-
-- slices.sortFunc
-- need to write my own sorting function for descending pageviews
-- inside sortFunc: first use custom function. if n != 0 return n; else (if they're equal), return strings.Compare
-*/
