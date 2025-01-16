@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+
 func main() {
 	args := os.Args[1:]
 
@@ -44,7 +45,5 @@ func main() {
 	go cfg.crawlPage(rawBaseURL)
 	cfg.wg.Wait()
 
-	for page, count := range cfg.pages {
-		fmt.Printf("amount: %d, page: %s\n",count, page)
-	}
+	printReport(cfg.pages, rawBaseURL)
 }
